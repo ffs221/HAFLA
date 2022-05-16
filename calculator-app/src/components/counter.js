@@ -3,22 +3,31 @@ import { useEffect, useState } from "react";
 function Counter({ initCount }) {
     const [count, setCount] = useState(initCount); //display
     const [counter, setCounter] = useState(initCount); //counter calculation
+    const [isReset, setReset] = useState(false);
     const [isAddition, setIsAddition] = useState(false);
 
     let numbers = [...Array(9).keys()];
 
     function setFinalized(e) {
         e.preventDefault();
-        setCount(counter)
+        setCount(counter);
+        setReset(true);
     }
 
     function setCounterSeries(value, e) {
         e.preventDefault();
+        let displayValue = null;
         setCount(currCount => {
             if (currCount == 0 || isAddition) {
                 return value
+            } else if (isReset) {
+                setReset(false);
+                return value
+
             }
-            return currCount.toString() + value
+
+            displayValue = currCount.toString() + value
+            return displayValue
         })
 
         setCounter(currCounter => {
@@ -26,13 +35,17 @@ function Counter({ initCount }) {
                 setIsAddition(false)
                 return currCounter + value
             }
-            return currCounter
+            else if (isReset) {
+                setReset(false);
+                return value
+            }
+            return parseInt(displayValue)
         })
     }
 
     useEffect(() => {
-        console.log(count, isAddition, counter)
-    }, [count, isAddition, counter])
+        console.log(count, isAddition, counter, isReset)
+    }, [count, isAddition, counter, isReset])
 
     return (
         <div>
@@ -40,7 +53,7 @@ function Counter({ initCount }) {
             <br></br>
             {
                 numbers.map(el =>
-                    <button onClick={(e) => setCounterSeries(el,e)}>
+                    <button onClick={(e) => setCounterSeries(el, e)}>
                         <span> {el} </span>
                     </button>)
             }
