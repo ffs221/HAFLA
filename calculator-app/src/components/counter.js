@@ -10,7 +10,7 @@ function Counter({ initCount }) {
 
     function setCounter(value) {
         console.log(value)
-        setCount(value)
+        setCount(currCount => currCount + value)
     }
 
     useEffect(() => {

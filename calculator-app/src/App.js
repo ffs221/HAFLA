@@ -5,7 +5,7 @@ import Counter from './components/counter'
 function App() {
   return (
     <>
-    <Counter initCount={0}></Counter>
+    <Counter initCount={''}></Counter>
     </>
   );
 }
