@@ -2,20 +2,33 @@ import { useEffect, useState } from "react";
 
 function Counter({ initCount }) {
     const [count, setCount] = useState(initCount);
+    const [isAddition, setIsAddition] = useState(false);
+
     let numbers = [...Array(9).keys()];
 
-    function increaseCountBy1() {
-        setCount(currCount => currCount + 1)
+    function increaseCount(currCount, value) {
+        setCount(parseInt(currCount) + value)
+        setIsAddition(false)
     }
 
-    function setCounter(value) {
-        console.log(value)
-        setCount(currCount => currCount + value)
+    function setAddition(){
+        setIsAddition(true)
+    }
+
+    function setCounterSeries(value) {
+        setCount(currCount => {
+            if(isAddition) {
+                increaseCount(currCount, value)
+                return
+            } else {
+                return currCount.toString() + value
+            }
+        })
     }
 
     useEffect(() => {
-
-    }, [count])
+        console.log(count, isAddition)
+    }, [count,isAddition])
 
     return (
         <div>
@@ -23,10 +36,13 @@ function Counter({ initCount }) {
             <br></br>
             {
                 numbers.map(el => 
-                <button onClick={() => setCounter(el)}>
+                <button onClick={() => setCounterSeries(el)}>
                 <span> {el} </span>
                 </button>)
             }
+            <button onClick={setAddition}> 
+                +   
+            </button>
         </div>
     )
 }
