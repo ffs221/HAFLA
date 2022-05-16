@@ -7,51 +7,47 @@ function Counter({ initCount }) {
 
     let numbers = [...Array(9).keys()];
 
-    function increaseCount(currCount, value) {
-        setCounter(parseInt(currCount) + value)
-        setIsAddition(false)
-    }
-
-    function setAddition(){
-        setIsAddition(true)
-    }
-
-    function setFinalized(){
+    function setFinalized(e) {
+        e.preventDefault();
         setCount(counter)
     }
 
-    function setCounterSeries(value) {
+    function setCounterSeries(value, e) {
+        e.preventDefault();
         setCount(currCount => {
-            if(isAddition) {
-                increaseCount(currCount, value)
+            if (currCount == 0 || isAddition) {
                 return value
-            } else {
-                if(currCount == 0) {
-                    return value
-                }
-                return currCount.toString() + value
             }
+            return currCount.toString() + value
+        })
+
+        setCounter(currCounter => {
+            if (count == 0 || isAddition) {
+                setIsAddition(false)
+                return currCounter + value
+            }
+            return currCounter
         })
     }
 
     useEffect(() => {
-        console.log(count, isAddition)
-    }, [count,isAddition])
+        console.log(count, isAddition, counter)
+    }, [count, isAddition, counter])
 
     return (
         <div>
             <span> {count} </span>
             <br></br>
             {
-                numbers.map(el => 
-                <button onClick={() => setCounterSeries(el)}>
-                <span> {el} </span>
-                </button>)
+                numbers.map(el =>
+                    <button onClick={(e) => setCounterSeries(el,e)}>
+                        <span> {el} </span>
+                    </button>)
             }
-            <button onClick={setAddition}> 
-                +   
+            <button onClick={() => setIsAddition(true)}>
+                +
             </button>
-            <button onClick={setFinalized}> 
+            <button onClick={setFinalized}>
                 =
             </button>
         </div>
